@@ -1,5 +1,5 @@
-import logoLibreria from "./../assets/logo.jpg"
-import "../App.css"
+import logoLibreria from "./../assets/logo.jpg";
+import "../App.css";
 import CartWidget from "./CartWidget.jsx";
 import {Link, NavLink} from "react-router-dom";
 

@@ -1,36 +1,32 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import productosJson from '../productos.json';
 import ItemDetail from './ItemDetail.jsx';
+import {doc, getDoc, getFirestore} from "firebase/firestore";
 
-function getProducts(itemId) {
-  return new Promise((resolve) => {
-      if (!itemId){
-      resolve(productosJson);
-      }else {
-        const parseItemId = parseInt (itemId)
-        const productosFiltrados = productosJson.filter((producto) =>
-           producto.id === parseItemId);
-        resolve (productosFiltrados);
-      }
-  });
-}
 
-export default function ItemDetailContainer(){
-    const [product, setProduct]= useState();  
-    const {itemId} = useParams ()
+export default function ItemDetailContainer() {
 
-    useEffect (()=>{
-      getProducts(itemId)
-        .then ((data) => setProduct(data))
-    },[itemId]);
+  const [product, setProduct] = useState();
+
+  const {itemId} = useParams();
   
-    if  (!product) return null;
+  useEffect(()=>{
+    const db = getFirestore();
+
+    const docRef = doc (db, "productos", itemId);
+      getDoc(docRef).then((snapshot)=>{
+        if (snapshot.exists()){
+          setProduct({id: snapshot.id, ...snapshot.data() });
+        }
+    });
+  }, [itemId]);
+  
+    if (!product) return null;
   
     return (
       <div>
-        <ItemDetail product={product[0]} />
+        <ItemDetail product={product} />
       </div>
     );
   }
