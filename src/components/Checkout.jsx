@@ -6,36 +6,25 @@ import  "../App.css";
 
 export default function Checkout() {
 
-  const { clear } = useContext(CartContext);
+  const { cart, clear, total } = useContext(CartContext);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
 
   const [orderId, SetOrderId] = useState ();
+
   
   function crearOrden () {
     const db = getFirestore();
     const order = {
       buyer: {
-        name: "Hector",
-        phone: 11391724,
-        email: "Hector@gmail.com",
+        name,
+        phone,
+        email,
       },
-      items: [{
-        name:"Como atrapar una estrella",
-        price: 9900,
-        id: "kjhad683bnzx3",
-        quantity: 1,
-       },
-       {
-        name: "Palabras semilla",
-        price: 3950,
-        id: "lw1nc73nh6bq",
-        quantity: 1,
-        }
-      ],
-      total: 13850,
+      items: cart,
+      total: total,
     };
     const ordenesRef = collection(db, "ordenes");
     addDoc(ordenesRef, order).then((result) =>
@@ -43,12 +32,13 @@ export default function Checkout() {
     clear();
   }
   
+  
   if (orderId){
     return (
       <div>
         <h1 className='titulo-h1'>Datos de la compra</h1>
         <div className='checkout'>
-          <h2>Muchas gracias por tu compra</h2>
+          <h2>Muchas gracias por tu compra!</h2>
           <h2>Tu codigo de pedido es: {orderId} </h2>
           <h2>Esperamos que disfrutes tu lectura, te esperamos para una nueva aventura!</h2>
         </div>  

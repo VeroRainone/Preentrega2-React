@@ -8,6 +8,7 @@ import {collection, getDocs, getFirestore, query, where} from "firebase/firestor
 
 export default function ItemListContainer() {
   const [productos, setProductos] = useState([]);
+  const [loading, setLoading] = useState(true); 
 
   const {categoryId} = useParams();
 
@@ -23,14 +24,20 @@ export default function ItemListContainer() {
       if (snapshot.size !== 0){
         setProductos(snapshot.docs.map(doc =>({id: doc.id, ...doc.data()})));
       }
+    })
+    .catch((error) => {
+      console.error("Error al obtener los productos:", error);
+    })
+    .finally(() => {
+      setLoading(false); 
     });
   }, [categoryId]);
     
-  if (!productos || productos.length === 0) {
-
+  if (loading) {
+    
     return (
       <div>
-        <ColorRing
+         <ColorRing
           visible={true}
           height="80"
           width="80"
@@ -41,10 +48,19 @@ export default function ItemListContainer() {
         />
       </div>
     );
-  } return (
+  }
+
+  if (!productos || productos.length === 0) {
+    return (
+      <div>
+        <h1>No se encontraron productos en esta categoría</h1>
+      </div>
+    );
+  }
+    
+  return (
       <div>
         <ItemList productos={productos} />
       </div>
   );
 }
-

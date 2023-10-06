@@ -10,7 +10,7 @@ export default function ItemList({productos}) {
       <ul className='item-list'>
         {productos.map((producto) => (
           <Link to={`/item/${producto.id}`} key={producto.id}>
-            <Item key={producto.id} producto={producto} />
+            <Item producto={producto} />
           </Link>
         ))}
       </ul>

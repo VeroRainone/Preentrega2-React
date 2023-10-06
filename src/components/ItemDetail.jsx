@@ -12,9 +12,7 @@ export default function ItemDetail({ product }) {
   const onAdd = (qty) => {
     // qty es la cantidad que eligio el usuario (count)
     // Llama a la función addItem para agregar el producto al carrito
-    if (qty > 0) {
-      addItem(product, qty);
-    }
+    addItem(product, qty);
     setCantidad(qty);
   };
 
